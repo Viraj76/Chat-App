@@ -1,15 +1,21 @@
-package com.example.authentication
+package com.example.authentication.auth
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.authentication.databinding.ActivitySingUpBinding
+import com.example.authentication.models.Users
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class SingUpActivity : AppCompatActivity() {
+
     lateinit var binding: ActivitySingUpBinding
     lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var databaseReference: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySingUpBinding.inflate(layoutInflater)
@@ -21,6 +27,7 @@ class SingUpActivity : AppCompatActivity() {
             startActivity(intent)
         }
         binding.btnSignUp.setOnClickListener {
+            val name = binding.nameEt.text.toString()
             val email = binding.emailEt.text.toString()
             val password = binding.passET.text.toString()
             val confirmPassword = binding.confirmPassEt.text.toString()
@@ -30,8 +37,11 @@ class SingUpActivity : AppCompatActivity() {
                     firebaseAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
+                                val currentUserId = firebaseAuth.currentUser?.uid
+                                addUserToDatabase(name,email,currentUserId)
                                 val intent = Intent(this, SingInActivity::class.java)
                                 startActivity(intent)
+                                finish()
                             } else {
                                 Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT)
                                     .show()
@@ -56,5 +66,13 @@ class SingUpActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun addUserToDatabase(name: String, email: String, currentUserId: String?) {
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users")
+        val user = Users(name,email,currentUserId)
+        if (currentUserId != null) {
+            databaseReference.child(currentUserId).setValue(user)
+        }
     }
 }

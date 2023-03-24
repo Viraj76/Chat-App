@@ -1,11 +1,11 @@
-package com.example.authentication
+package com.example.authentication.auth
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.example.authentication.MainActivity
 import com.example.authentication.databinding.ActivitySingInBinding
-import com.example.authentication.databinding.ActivitySingUpBinding
 import com.google.firebase.auth.FirebaseAuth
 
 class SingInActivity : AppCompatActivity() {
@@ -16,12 +16,13 @@ class SingInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySingInBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //Start Here
 
         firebaseAuth = FirebaseAuth.getInstance()
-
         binding.textView.setOnClickListener {
-            val intent = Intent(this,SingUpActivity::class.java)
+            val intent = Intent(this, SingUpActivity::class.java)
             startActivity(intent)
+
         }
 
         binding.button.setOnClickListener {
@@ -35,6 +36,7 @@ class SingInActivity : AppCompatActivity() {
                             if (it.isSuccessful) {
                                 val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
+                                finish()
                             } else {
                                 Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT)
                                     .show()
@@ -54,11 +56,11 @@ class SingInActivity : AppCompatActivity() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        if(firebaseAuth.currentUser != null){
-            val intent = Intent(this,MainActivity::class.java)
-            startActivity(intent)
-        }
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        if(firebaseAuth.currentUser != null){
+//            val intent = Intent(this, MainActivity::class.java)
+//            startActivity(intent)
+//        }
+//    }
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SingUpActivity">
+    tools:context=".auth.SingUpActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/nameLL"
@@ -26,7 +26,7 @@
             style="@style/LoginTextInputInnerFieldStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Type your Email"
+            android:hint="Type your Name"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
