@@ -1,19 +1,22 @@
-package com.example.authentication
+package com.example.authentication.adapters
 
-import android.os.Binder
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.example.authentication.ChatActivity
 import com.example.authentication.databinding.UserItemViewBinding
 import com.example.authentication.models.Users
 
-class ChatAdapter:RecyclerView.Adapter<ChatAdapter.UsersViewHolder>() {
+class ChatAdapter(private val context: Context):RecyclerView.Adapter<ChatAdapter.UsersViewHolder>() {
 
     private var userList   = ArrayList<Users>()
 
     fun setUserList(userList : ArrayList<Users>){
         this.userList = userList
+        notifyDataSetChanged()
     }
 
 
@@ -25,6 +28,12 @@ class ChatAdapter:RecyclerView.Adapter<ChatAdapter.UsersViewHolder>() {
     override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
         val currentUser = userList[position]
         holder.binding.tvUserName.text = currentUser.name
+        holder.itemView.setOnClickListener{
+            val intent = Intent(context, ChatActivity::class.java)
+            intent.putExtra("name",currentUser.name)
+            intent.putExtra("userId", currentUser.userId)  //imp
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {

@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.example.authentication.MainActivity
 import com.example.authentication.databinding.ActivitySingUpBinding
 import com.example.authentication.models.Users
 import com.google.firebase.auth.FirebaseAuth
@@ -25,6 +26,7 @@ class SingUpActivity : AppCompatActivity() {
         binding.textView.setOnClickListener {
             val intent = Intent(this, SingInActivity::class.java)
             startActivity(intent)
+            finish()
         }
         binding.btnSignUp.setOnClickListener {
             val name = binding.nameEt.text.toString()
@@ -73,6 +75,13 @@ class SingUpActivity : AppCompatActivity() {
         val user = Users(name,email,currentUserId)
         if (currentUserId != null) {
             databaseReference.child(currentUserId).setValue(user)
+        }
+    }
+    override fun onStart() {
+        super.onStart()
+        if(firebaseAuth.currentUser != null){
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 }
